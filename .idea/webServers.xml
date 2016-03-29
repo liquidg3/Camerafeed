@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="9eb50ea8-4b6a-4668-bc5a-6576e95591b1" name="PedestrianPi" url="http://75.166.160.175">
+        <fileTransfer host="75.166.160.175" port="22" rootFolder="/home/pi/repos/Camerafeed" accessType="SFTP" password="dfdadfc3dfc7dfcfdfcbdfc6dfd8dfcfdfcbdfcedfd3" username="pi">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
