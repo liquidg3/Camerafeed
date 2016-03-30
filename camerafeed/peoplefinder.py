@@ -1,5 +1,7 @@
-from person import Person
 import copy
+
+from camerafeed.person import Person
+
 
 class PeopleFinder:
     _people = []
