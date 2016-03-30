@@ -9,12 +9,15 @@ fantastic [tutorials available](http://www.pyimagesearch.com/opencv-tutorials-re
 2. Checkout the repo:
     ```bash
     $ git clone git@github.com:liquidg3/Camerafeed.git
+
 3. Jump into the repo
     ```bash
     $ cd Camerafeed
+
 4. Install additional dependencies
     ```bash
     $ pip setup.py develop
+
 5. Run the app
     ```bash
     $python run.py
