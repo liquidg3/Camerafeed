@@ -4,7 +4,7 @@ import time
 import cv2
 import imutils
 
-from camerafeed.peoplefinder import PeopleFinder
+from camerafeed.peopletracker import PeopleTracker
 from camerafeed.tripline import Tripline
 
 
@@ -73,12 +73,11 @@ class CameraFeed:
         cv2.ocl.setUseOpenCL(False)
 
         # people tracking
-        self.finder = PeopleFinder(people_options=self.people_options)
+        self.finder = PeopleTracker(people_options=self.people_options)
 
         # STARTS HERE
         # connect to camera
         self.camera = cv2.VideoCapture(self.source)
-        self.camera.set(cv2.CAP_PROP_FPS, 10)
 
         # setup detectors
         self.hog = cv2.HOGDescriptor()
@@ -102,7 +101,7 @@ class CameraFeed:
                 frame = self.handle_the_people(frame)
                 frame = self.render_hud(frame)
 
-                cv2.imshow('preview', frame)
+                cv2.imshow('Camerafeed', frame)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break

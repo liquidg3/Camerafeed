@@ -17,12 +17,13 @@ class Person:
     name = None
     _color = None
     _colliding_color = None
+    _charge = 0  # how many frames of detection before i'm considered "detected"
     colliding = False
     meta = None  # lets others store meta data for us
     labels = None  # special labels others may want to drop in
 
     def __init__(self, rect=None, life=10, death_delay=5, max_distance=10, name='Person Dude', color=(0, 255, 0),
-                 colliding_color=(255, 0, 0)):
+                 colliding_color=(255, 0, 0), charge=5):
 
         self.meta = {}
         self.labels = {}
@@ -34,6 +35,9 @@ class Person:
         self._colliding_color = colliding_color
         self._death_delay = float(death_delay)
         self._time = time.time()
+        self._full_charge = int(charge)
+        self._charge = 0
+
 
         if rect is not None:
             self.set_rect(rect)
@@ -78,6 +82,10 @@ class Person:
 
     def draw(self, frame):
 
+        #we are not fully charged yet, don't show
+        if self._charge < self._full_charge:
+            return frame
+
         # square
         alpha = (self.life / self._full_life)
 
@@ -107,6 +115,7 @@ class Person:
     def touch(self):
         self.life = self._full_life  # we like being touched
         self._time = time.time()
+        self._charge += 1
 
     def tick(self):
         self.life -= 1  # we die with each tick

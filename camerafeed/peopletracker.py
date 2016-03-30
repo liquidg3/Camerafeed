@@ -3,7 +3,7 @@ import copy
 from camerafeed.person import Person
 
 
-class PeopleFinder:
+class PeopleTracker:
     _people = []
     _name_index = 1
     _frame = 1

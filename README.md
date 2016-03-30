@@ -6,7 +6,7 @@ stand-alone app that pulls from settings.ini.
 ##Getting Started
 1. First things first, you gotta install Python 3.4+ and OpenCV 3.0+. Luckily, computer vision expert __Adrian__ has made his
 fantastic [tutorials available](http://www.pyimagesearch.com/opencv-tutorials-resources-guides/).
-2. Checkout the repo:
+2. Clone the repo:
     ```bash
     $ git clone git@github.com:liquidg3/Camerafeed.git
     ```
