@@ -82,3 +82,7 @@ line2_direction_1: out
 line2_direction_2: in
 
 ```
+
+##Recommended Reading
+1. [Pedestrian Detection OpenCV](http://www.pyimagesearch.com/2015/11/09/pedestrian-detection-opencv/)
+2. [HOG detectMultiScale parameters explained](http://www.pyimagesearch.com/2015/11/16/hog-detectmultiscale-parameters-explained/)
