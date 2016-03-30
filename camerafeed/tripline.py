@@ -72,8 +72,8 @@ class Tripline:
         dy = self._point_2[1] - self._point_1[1]
         theta = math.atan2(dy, dx)
         theta *= 180 / math.pi
-        if (theta < 0):
-            theta = 360 + theta
+        if theta < 0:
+            theta += 360
         return theta * -1
 
     def draw(self, frame):
@@ -128,7 +128,6 @@ class Tripline:
             self._collisions[key] -= 1
             if self._collisions[key] == 0:
                 del self._collisions[key]
-
 
     def handle_collision(self, person):
 
