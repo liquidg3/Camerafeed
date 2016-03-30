@@ -15,7 +15,7 @@ class Tripline:
     _buffer_size = 10
     count = 0
     _line = None
-    _collisions = {}
+    _collisions = None
     _direction_1 = None
     _direction_2 = None
     _buffer_1 = None
@@ -24,10 +24,11 @@ class Tripline:
     _line_index = 0
 
     def __init__(self, point_1=(0, 0), point_2=(100, 0), color=(255, 0, 0), stroke=2, buffer_size=10,
-                 direction_1='Left', direction_2='Right'):
+                 direction_1='north', direction_2='south'):
 
         global line_index
 
+        self._collisions = {}
         self._point_1 = point_1
         self._point_2 = point_2
         self._stroke = stroke
@@ -40,9 +41,14 @@ class Tripline:
         self._line_index = line_index
         line_index += 1
 
-        # draw buffer triplines
+        # for meta data
+        self._line_key = "line-%d" % self._line_index
+
+        # cache angle
+        self._angle = self.angle()
+
+        # draw buffer lines (really thin trip lines)
         if buffer_size is not None:
-            self._angle = self.angle()
             buffer1_point_1 = self._buffer_position(self._point_1, self._angle)
             buffer1_point_2 = self._buffer_position(self._point_2, self._angle)
 
@@ -61,7 +67,7 @@ class Tripline:
         x = point[0]
         y = point[1]
         r = self._buffer_size
-        a = angle  # * (math.pi / 180)
+        a = angle  * math.pi / 180
 
         new_point = (int(x + r * math.sin(a)), int(y + r * math.cos(a)))
 
@@ -102,11 +108,6 @@ class Tripline:
         return frame
 
     def collides_with(self, person):
-        # point1 = person.point1()
-        # point2 = person.point2()
-
-        # box = geometry.box(point1[0], point1[1], point2[0], point2[1])
-
         center = person.center()
         point = geometry.Point(center[0], center[1])
         circle = point.buffer(10).boundary
@@ -117,10 +118,21 @@ class Tripline:
 
     def add_collision(self, person):
         self.colliding = True
+        person.colliding = True
         key = person.name
+
+        # if first hit
         if key not in self._collisions:
+
             self.count += 1
             self._collisions[key] = 10
+
+            buffer_key = self._line_key + '-buffer'
+            direction = None
+
+            if buffer_key in person.meta:
+                direction = person.meta[buffer_key]
+                person.labels[self._line_key] = 'Heading %s' % direction
 
     def remove_collision(self, person):
         key = person.name
@@ -131,8 +143,19 @@ class Tripline:
 
     def handle_collision(self, person):
 
+        buffer_key = self._line_key + '-buffer'
+
+        # do buffer checks
+        for i in range(1, 3):
+
+            buffer = getattr(self, '_buffer_%d' % i, None)
+
+            if buffer is not None:
+                if buffer.collides_with(person):
+                    direction = getattr(self, '_direction_%d' % i)
+                    person.meta[buffer_key] = direction
+
         if self.collides_with(person):
-            person.colliding = True
             self.add_collision(person)
         else:
             self.remove_collision(person)
