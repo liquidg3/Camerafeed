@@ -1,6 +1,7 @@
 import cv2
 from shapely.geometry import LineString
 from shapely import geometry
+from pymitter import EventEmitter
 import math
 
 line_index = 0
@@ -67,7 +68,7 @@ class Tripline:
         x = point[0]
         y = point[1]
         r = self._buffer_size
-        a = angle  * math.pi / 180
+        a = angle * math.pi / 180
 
         new_point = (int(x + r * math.sin(a)), int(y + r * math.cos(a)))
 
@@ -116,6 +117,7 @@ class Tripline:
 
         return not intersection.is_empty
 
+    # 1 means new collision, 2 means old collision
     def add_collision(self, person):
         self.colliding = True
         person.colliding = True
@@ -133,6 +135,12 @@ class Tripline:
             if buffer_key in person.meta:
                 direction = person.meta[buffer_key]
                 person.labels[self._line_key] = 'Heading %s' % direction
+                person.meta[self._line_key] = direction
+                del person.meta[buffer_key]
+
+            return 1
+
+        return 2
 
     def remove_collision(self, person):
         key = person.name
@@ -141,6 +149,7 @@ class Tripline:
             if self._collisions[key] == 0:
                 del self._collisions[key]
 
+    # returning 0 means no collission, 1 means new collision, 2 means old collision
     def handle_collision(self, person):
 
         buffer_key = self._line_key + '-buffer'
@@ -156,6 +165,7 @@ class Tripline:
                     person.meta[buffer_key] = direction
 
         if self.collides_with(person):
-            self.add_collision(person)
+            return self.add_collision(person)
         else:
             self.remove_collision(person)
+            return 0

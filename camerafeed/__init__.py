@@ -3,6 +3,8 @@ import time
 
 import cv2
 import imutils
+import grequests
+import json
 
 from camerafeed.peopletracker import PeopleTracker
 from camerafeed.tripline import Tripline
@@ -15,7 +17,7 @@ class CameraFeed:
 
     def __init__(self, source=0, crop_x1=0, crop_y1=0, crop_x2=500, crop_y2=500, max_width=640, b_and_w=False,
                  hog_win_stride=6, hog_padding=8, hog_scale=1.05, mog_enabled=False, people_options=None, lines=None,
-                 font=cv2.FONT_HERSHEY_SIMPLEX):
+                 font=cv2.FONT_HERSHEY_SIMPLEX, endpoint=None):
 
         self.__dict__.update(locals())
 
@@ -24,6 +26,9 @@ class CameraFeed:
         # load config
         config = configparser.ConfigParser()
         config.read(config_path)
+
+        # remote host settings
+        self.endpoint = config.get('host', 'endpoint')
 
         # video source settings
         self.crop_x1 = config.getint('video_source', 'frame_x1')
@@ -78,6 +83,7 @@ class CameraFeed:
         # STARTS HERE
         # connect to camera
         self.camera = cv2.VideoCapture(self.source)
+        self.camera.set(cv2.CAP_PROP_FPS, 10)
 
         # setup detectors
         self.hog = cv2.HOGDescriptor()
@@ -145,7 +151,8 @@ class CameraFeed:
         # draw triplines
         for line in self.lines:
             for person in people:
-                line.handle_collision(person)
+                if line.handle_collision(person) == 1:
+                    self.new_collision(person)
 
             frame = line.draw(frame)
 
@@ -154,3 +161,17 @@ class CameraFeed:
             person.colliding = False
 
         return frame
+
+    def new_collision(self, person):
+
+        if self.endpoint is not None:
+            post = {
+                'name': person.name,
+                'meta': json.dumps(person.meta),
+                'date': time.time()
+            }
+
+            request = grequests.post(self.endpoint, data=post)
+            grequests.map([request])
+
+        print("NEW COLLISION %s" % person.name)

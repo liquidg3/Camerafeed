@@ -8,8 +8,10 @@ setup(name="Camerafeed",
       author_email="me@taylorrome.ro",
       packages=['camerafeed'],
       install_requires=[
-          'cv2',
           'imutils',
-          'shapely'
+          'shapely',
+          'grequests',
+          'imutils',
+          'configparser'
       ],
-      scripts=['bin/tipslite'])
+      scripts=['bin/camerafeed'])
