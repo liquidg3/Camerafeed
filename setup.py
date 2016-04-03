@@ -12,6 +12,7 @@ setup(name="Camerafeed",
           'shapely',
           'grequests',
           'imutils',
-          'configparser'
+          'configparser',
+          'picamera[array]'
       ],
       scripts=['bin/camerafeed'])

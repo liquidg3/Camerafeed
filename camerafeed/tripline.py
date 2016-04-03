@@ -1,7 +1,6 @@
 import cv2
 from shapely.geometry import LineString
 from shapely import geometry
-from pymitter import EventEmitter
 import math
 
 line_index = 0
