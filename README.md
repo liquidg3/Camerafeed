@@ -1,9 +1,9 @@
-#Camerafeed
+# Camerafeed
 A simple app (or can be used as a module) to track people as they move in a video. You can also draw "triplines" that
 will emit events when a person crosses them. You can use the camerafeed module in your own app or you can run it as a
 stand-alone app that pulls from settings.ini.
 
-##Getting Started
+## Getting Started
 1. First things first, you gotta install Python 3.4+ and OpenCV 3.0+. Luckily, computer vision expert __Adrian__ has made his
 fantastic [tutorials available](http://www.pyimagesearch.com/opencv-tutorials-resources-guides/).
 2. Clone the repo:
@@ -23,7 +23,7 @@ fantastic [tutorials available](http://www.pyimagesearch.com/opencv-tutorials-re
     $python run.py
     ```
 
-##Settings
+## Settings
 Checkout `settings.ini` for everything you can customize when running Camerafeed as an app.
 
 ```ini
